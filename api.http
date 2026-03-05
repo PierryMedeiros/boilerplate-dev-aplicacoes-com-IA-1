@@ -1,98 +1,31 @@
 @baseUrl = http://localhost:3000
 
-### --- USUÁRIOS ---
-
-### Criar usuário (Sucesso)
-POST {{baseUrl}}/api/users
+### 1. Checkout Complexo (Sucesso - Cartão começa com 4)
+POST {{baseUrl}}/api/checkout
 Content-Type: application/json
 
 {
-  "name": "João Silva",
-  "email": "joao.silva@email.com",
-  "age": 25
+  "usr": "Guilherme",
+  "eml": "gui@fullcycle.com.br",
+  "pwd": "senhaforte",
+  "c_id": 2,
+  "card": "4111222233334444"
 }
 
-### Criar usuário (Erro - Menor de idade)
-POST {{baseUrl}}/api/users
+### 2. Checkout Complexo (Erro - Pagamento recusado)
+POST {{baseUrl}}/api/checkout
 Content-Type: application/json
 
 {
-  "name": "Adolescente",
-  "email": "jovem@email.com",
-  "age": 16
+  "usr": "João",
+  "eml": "joao@teste.com",
+  "pwd": "123",
+  "c_id": 1,
+  "card": "5111222233334444"
 }
 
-### Listar usuários
-GET {{baseUrl}}/api/users
+### 3. Relatório Administrativo (O ataque N+1 / N*M no banco)
+GET {{baseUrl}}/api/admin/financial-report
 
-### Atualizar usuário (Sucesso)
-# Atualizando o usuário de ID 1 (Carlos, que é criado no seed inicial)
-PUT {{baseUrl}}/api/users/1
-Content-Type: application/json
-
-{
-  "name": "Carlos Atualizado",
-  "email": "carlos.novo@email.com",
-  "age": 31
-}
-
-### Atualizar usuário (Erro - Email sem arroba)
-PUT {{baseUrl}}/api/users/1
-Content-Type: application/json
-
-{
-  "name": "Carlos",
-  "email": "email-invalido",
-  "age": 30
-}
-
-### --- CURSOS ---
-
-### Criar curso (Sucesso)
-POST {{baseUrl}}/api/courses
-Content-Type: application/json
-
-{
-  "title": "Curso de Arquitetura de Software",
-  "price": 1500.00
-}
-
-### Criar curso (Erro - Título menor que 5 caracteres)
-POST {{baseUrl}}/api/courses
-Content-Type: application/json
-
-{
-  "title": "AWS",
-  "price": 200.00
-}
-
-### --- MATRÍCULAS ---
-
-### Criar matrícula (Sucesso)
-# Matriculando o usuário 1 no curso 1 (ambos criados no seed inicial)
-POST {{baseUrl}}/api/enrollments
-Content-Type: application/json
-
-{
-  "user_id": 1,
-  "course_id": 1
-}
-
-### Criar matrícula (Erro - Usuário já matriculado)
-# Se você rodar a requisição de sucesso acima novamente, vai cair neste erro
-POST {{baseUrl}}/api/enrollments
-Content-Type: application/json
-
-{
-  "user_id": 1,
-  "course_id": 1
-}
-
-### Criar matrícula (Erro - Usuário inexistente)
-POST {{baseUrl}}/api/enrollments
-Content-Type: application/json
-
-{
-  "user_id": 999,
-  "course_id": 1
-}
+### 4. Deletar Usuário (Gera inconsistência no banco)
+DELETE {{baseUrl}}/api/users/1
