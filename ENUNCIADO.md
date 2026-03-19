@@ -273,7 +273,7 @@ claude "/refactor-arch"
   - A Fase 3 melhora a estrutura sem quebrar a aplicação (todos os endpoints devem continuar respondendo)
 - Salvar o relatório em `reports/audit-project-3.md`
 
-> **Nota:** Este projeto já possui alguma separação de camadas — o desafio aqui é diferente. A skill deve identificar problemas de segurança, performance e qualidade de código mesmo quando a arquitetura não é um monolito completo. O importante é que ela detecte os problemas reais e proponha melhorias sem destruir a organização existente.
+> **Nota:** Este projeto já possui alguma separação de camadas, mas isso não significa que a arquitetura está adequada. A skill deve identificar tanto problemas de código (segurança, performance, qualidade) quanto oportunidades de melhoria arquitetural. Se houver mudanças estruturais necessárias, a skill deve propô-las e executá-las.
 
 ### 6. Testes de Validação da Skill
 
