@@ -35,10 +35,10 @@ PHASE 1: PROJECT ANALYSIS
 Language:      Python
 Framework:      Flask 3.1.1
 Dependencies:  flask-cors
-Domain:        System API genérica (usuários, autenticação)
+Domain:        E-commerce API (produtos, pedidos, usuários)
 Architecture:  Monolítica — tudo em 4 arquivos, sem separação de camadas
 Source files:  4 files analyzed
-DB tables:     usuarios, logs, configuracoes
+DB tables:     produtos, usuarios, pedidos, itens_pedido
 ================================
 ```
 
@@ -84,13 +84,13 @@ PHASE 3: REFACTORING COMPLETE
 src/
 ├── config/settings.py
 ├── models/
-│   ├── usuario_model.py
-│   └── log_model.py
+│   ├── produto_model.py
+│   └── usuario_model.py
 ├── views/
 │   └── routes.py
 ├── controllers/
-│   ├── usuario_controller.py
-│   └── auth_controller.py
+│   ├── produto_controller.py
+│   └── pedido_controller.py
 ├── middlewares/error_handler.py
 └── app.py (composition root)
 
@@ -106,7 +106,7 @@ src/
 - **Ferramenta:** Claude Code (CLI)
 - **Recurso:** Custom Skills (`.claude/skills/`)
 - **Formato dos arquivos de referência:** Markdown
-- **Projetos-alvo:** Python/Flask, Node.js/Express e JavaScript vanilla (fornecidos no repositório base)
+- **Projetos-alvo:** Python/Flask (2 projetos) e Node.js/Express (1 projeto) (fornecidos no repositório base)
 
 ## Contexto: o que é uma Claude Code Skill?
 
@@ -155,9 +155,9 @@ Antes de criar a skill, você deve entender os problemas que ela vai resolver.
 
 **Tarefas:**
 
-- Analisar o projeto `code-smells-project/` (Python/Flask — API genérica)
-- Analisar o projeto `ecommerce-api-legacy/` (Node.js/Express — API de E-commerce)
-- Analisar o projeto `task-manager-api/` (JavaScript vanilla — App de tarefas no browser)
+- Analisar o projeto `code-smells-project/` (Python/Flask — API de E-commerce)
+- Analisar o projeto `ecommerce-api-legacy/` (Node.js/Express — API de E-commerce/LMS)
+- Analisar o projeto `task-manager-api/` (Python/Flask — API de Task Manager)
 
 Para cada projeto, identificar e documentar no mínimo 5 problemas, incluindo pelo menos:
 
@@ -169,7 +169,7 @@ Documentar os achados na seção "Análise Manual" do seu `README.md`
 
 > **Dica:** Não precisa encontrar todos os problemas — foque nos que têm maior impacto arquitetural. Use os projetos como insumo para entender quais padrões sua skill precisa detectar.
 
-> **Por que 3 projetos?** Um é Python/Flask (backend API), um é Node.js/Express (backend API), e um é JavaScript vanilla (frontend). Sua skill precisa funcionar nos 3 para provar que é verdadeiramente agnóstica de tecnologia.
+> **Por que 3 projetos?** Dois são Python/Flask (com níveis de organização diferentes) e um é Node.js/Express. Sua skill precisa funcionar nos 3 para provar que é verdadeiramente agnóstica de tecnologia — lidando tanto com código completamente desestruturado quanto com projetos que já possuem alguma separação de camadas.
 
 ### 2. Criação da Skill
 
@@ -255,7 +255,7 @@ claude "/refactor-arch"
 
 ### 5. Execução contra o Projeto 3 (task-manager-api)
 
-Agora o teste real de agnóstico: um projeto JavaScript vanilla (frontend, sem framework de backend, sem banco de dados).
+Agora o teste com um projeto Python/Flask que já possui alguma organização de camadas (models, routes, services, utils).
 
 **Tarefas:**
 
@@ -268,12 +268,12 @@ claude "/refactor-arch"
 ```
 
 - Verificar que:
-  - A Fase 1 detecta corretamente JavaScript como linguagem e identifica que é um frontend vanilla (sem framework)
-  - A Fase 2 identifica problemas mesmo sendo um projeto menor (estado global, acoplamento UI/lógica, magic numbers, etc.)
-  - A Fase 3 melhora a estrutura sem quebrar a aplicação (o HTML deve abrir no browser e rodar)
+  - A Fase 1 detecta corretamente Python/Flask como stack e identifica o domínio de Task Manager
+  - A Fase 2 identifica problemas mesmo em um projeto parcialmente organizado (credenciais hardcoded, hash MD5, fake JWT, N+1 queries, código duplicado, etc.)
+  - A Fase 3 melhora a estrutura sem quebrar a aplicação (todos os endpoints devem continuar respondendo)
 - Salvar o relatório em `reports/audit-project-3.md`
 
-> **Nota:** Este projeto é pequeno e não tem backend/banco. A skill deve se adaptar — separando visualização (View) de lógica (Controller/Model). O importante é que ela detecte os problemas reais e não invente pastas desnecessárias.
+> **Nota:** Este projeto já possui alguma separação de camadas — o desafio aqui é diferente. A skill deve identificar problemas de segurança, performance e qualidade de código mesmo quando a arquitetura não é um monolito completo. O importante é que ela detecte os problemas reais e proponha melhorias sem destruir a organização existente.
 
 ### 6. Testes de Validação da Skill
 
@@ -319,11 +319,11 @@ A skill deve atingir os seguintes mínimos em **todos os 3 projetos**:
 | Fase 1 detecta stack corretamente | OBRIGATÓRIO (3/3 projetos) |
 | Fase 2 encontra >= 5 findings | OBRIGATÓRIO (3/3 projetos) |
 | Fase 2 inclui pelo menos 1 CRITICAL ou HIGH | OBRIGATÓRIO (3/3 projetos) |
-| Fase 3 aplicação/página funciona após refatoração | OBRIGATÓRIO (3/3 projetos) |
+| Fase 3 aplicação funciona após refatoração | OBRIGATÓRIO (3/3 projetos) |
 
 **IMPORTANTE:** Todos os critérios devem ser atingidos nos 3 projetos, não apenas em um!
 
-> **Sobre o projeto 3 (task-manager-api):** "aplicação funciona" significa que o `index.html` abre no browser e a aplicação roda. Não há endpoints HTTP para testar.
+> **Sobre o projeto 3 (task-manager-api):** Este projeto já possui alguma organização. "aplicação funciona" significa que a API inicia sem erros e todos os endpoints continuam respondendo corretamente.
 
 ## Estrutura obrigatória do projeto
 
@@ -333,7 +333,7 @@ Faça um fork do repositório base contendo os três projetos com code smells.
 desafio-skills/
 ├── README.md                              # Sua documentação
 │
-├── code-smells-project/                   # Projeto 1 — Python/Flask (API genérica)
+├── code-smells-project/                   # Projeto 1 — Python/Flask (API de E-commerce)
 │   ├── .claude/
 │   │   └── skills/
 │   │       └── refactor-arch/             # ← SUA SKILL AQUI
@@ -356,17 +356,25 @@ desafio-skills/
 │   │       └── refactor-arch/             # ← CÓPIA DA SKILL
 │   │           └── ...
 │   ├── src/
-│   │   └── app.js
+│   │   ├── app.js
+│   │   ├── GodManager.js
+│   │   └── utils.js
+│   ├── api.http
 │   └── package.json
 │
-├── task-manager-api/                      # Projeto 3 — JavaScript vanilla (Frontend app)
+├── task-manager-api/                      # Projeto 3 — Python/Flask (API de Task Manager)
 │   ├── .claude/
 │   │   └── skills/
 │   │       └── refactor-arch/             # ← CÓPIA DA SKILL
 │   │           └── ...
-│   ├── index.html
-│   ├── style.css
-│   └── app.js
+│   ├── app.py
+│   ├── database.py
+│   ├── seed.py
+│   ├── requirements.txt
+│   ├── models/
+│   ├── routes/
+│   ├── services/
+│   └── utils/
 │
 └── reports/                               # Relatórios gerados
     ├── audit-project-1.md                 # Saída da Fase 2 no projeto 1
@@ -382,15 +390,15 @@ desafio-skills/
 
 **O que já vem pronto:**
 
-- `code-smells-project/` — API genérica Python/Flask com code smells intencionais
-- `ecommerce-api-legacy/` — E-commerce API Node.js/Express com problemas de implementação
-- `task-manager-api/` — App de tarefas JavaScript vanilla com problemas de design
+- `code-smells-project/` — API de E-commerce Python/Flask com code smells intencionais
+- `ecommerce-api-legacy/` — E-commerce/LMS API Node.js/Express com problemas de implementação
+- `task-manager-api/` — API de Task Manager Python/Flask com organização parcial e problemas de segurança/qualidade
 
 ## Exemplos de problemas nos projetos
 
 Para que você entenda o tipo de problema que a skill deve detectar, aqui estão alguns exemplos. Parte do desafio é descobri-los na sua análise manual.
 
-### code-smells-project (API Genérica — Python/Flask)
+### code-smells-project (API de E-commerce — Python/Flask)
 
 | Severidade | Problema |
 |---|---|
@@ -406,13 +414,13 @@ Para que você entenda o tipo de problema que a skill deve detectar, aqui estão
 | HIGH | Lógica de negócio pesada implementada diretamente nas definições de rota |
 | MEDIUM | Validação ausente no payload de requisições POST |
 
-### task-manager-api (Task Manager — JavaScript vanilla)
+### task-manager-api (Task Manager — Python/Flask)
 
 | Severidade | Problema |
 |---|---|
-| HIGH | Estado global mutável controla o fluxo da aplicação inteira |
-| MEDIUM | `alert()` para feedback ao usuário — bloqueia a thread |
-| LOW | Magic numbers (limites de tarefas) hardcoded sem constantes |
+| CRITICAL | Hash MD5 para senhas — criptograficamente quebrado |
+| HIGH | Credenciais hardcoded (secret key, SMTP, database URI) |
+| MEDIUM | N+1 queries — loops buscando usuário/categoria um por um |
 
 Seu trabalho é ler o código, encontrar estes e os demais problemas, e então construir uma skill capaz de detectá-los automaticamente.
 
@@ -446,7 +454,7 @@ claude "/refactor-arch"
 
 Salve a saída da Fase 2 em `reports/audit-project-2.md`.
 
-**5. Executar no projeto 3 (JavaScript vanilla)**
+**5. Executar no projeto 3 (Python/Flask)**
 
 ```bash
 cd ../task-manager-api
@@ -516,5 +524,5 @@ Repositório público no GitHub (fork do repositório base) contendo:
 - **Seja específico nos sinais de detecção** — "código ruim" não ajuda; "query SQL dentro de loop for" é acionável.
 - **Teste incrementalmente** — não tente criar a skill perfeita de primeira.
 - **A skill deve ser copiável** — se ela só funciona em um projeto específico, está acoplada demais. Teste nos 3 projetos para validar.
-- **Projetos diferentes exigem adaptação** — a Fase 3 de um frontend JavaScript não vai ter as mesmas pastas de uma API Node. Sua skill deve se adaptar ao contexto.
+- **Projetos diferentes exigem adaptação** — a Fase 3 de um projeto já parcialmente organizado não vai ter as mesmas transformações de um monolito. Sua skill deve se adaptar ao contexto.
 - **Pedir confirmação na Fase 2 é obrigatório** — o humano deve revisar o relatório antes de qualquer modificação.
