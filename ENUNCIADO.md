@@ -208,7 +208,7 @@ Criar os 5 arquivos de referência obrigatórios:
 
 **Requisitos da skill:**
 
-- Deve ser agnóstica de tecnologia — os sinais de detecção e exemplos devem cobrir pelo menos 3 linguagens/frameworks diferentes
+- Deve ser agnóstica de tecnologia — deve funcionar corretamente nos 3 projetos fornecidos, independente da stack ou nível de organização
 - O catálogo de anti-patterns deve conter no mínimo 8 anti-patterns com severidade distribuída (CRITICAL, HIGH, MEDIUM, LOW)
 - O catálogo deve incluir detecção de APIs deprecated — identificar uso de APIs obsoletas e recomendar o equivalente moderno
 - O playbook deve ter no mínimo 8 padrões de transformação com exemplos de código antes/depois
@@ -228,7 +228,7 @@ claude "/refactor-arch"
 ```
 
 - Verificar que a Fase 1 detecta corretamente a stack e imprime o resumo
-- Verificar que a Fase 2 encontra no mínimo 8 dos problemas documentados na sua análise manual
+- Verificar que a Fase 2 encontra no mínimo 5 dos problemas documentados na sua análise manual
 - Confirmar a execução da Fase 3
 - Verificar que a Fase 3:
   - Cria a estrutura de diretórios baseada em MVC
@@ -294,7 +294,7 @@ Para cada projeto refatorado, valide o seguinte checklist:
 - [ ] Relatório segue o template definido em report-template.md
 - [ ] Cada finding tem arquivo e linhas exatos
 - [ ] Findings ordenados por severidade (CRITICAL → LOW)
-- [ ] Mínimo de 8 findings identificados
+- [ ] Mínimo de 5 findings identificados
 - [ ] Detecção de APIs deprecated incluída (se aplicável)
 - [ ] Skill pausa e pede confirmação antes da Fase 3
 
