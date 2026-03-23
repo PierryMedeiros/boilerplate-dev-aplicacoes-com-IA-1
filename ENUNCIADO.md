@@ -108,45 +108,6 @@ src/
 - **Formato dos arquivos de referência:** Markdown
 - **Projetos-alvo:** Python/Flask (2 projetos) e Node.js/Express (1 projeto) (fornecidos no repositório base)
 
-## Contexto: o que é uma Claude Code Skill?
-
-Uma Skill é um conjunto de instruções em Markdown que ensina o Claude Code a executar uma tarefa complexa de forma padronizada e repetível. Uma skill vive no diretório `.claude/skills/` do projeto e é invocada como um slash command (ex: `/refactor-arch`).
-
-### Estrutura de uma Skill
-
-```
-.claude/skills/nome-da-skill/
-├── SKILL.md              # Ponto de entrada — define nome, descrição e o fluxo
-└── references/           # Arquivos de referência que a SKILL.md referencia
-    ├── arquivo1.md
-    ├── arquivo2.md
-    └── ...
-```
-
-### Anatomia do SKILL.md
-
-```markdown
----
-name: nome-da-skill
-description: >
-  Descrição do que a skill faz. O Claude usa isso para decidir
-  quando sugerir a skill ao usuário.
-disable-model-invocation: true
-argument-hint: "[argumento-opcional]"
----
-
-# Título da Skill
-
-Instruções que o Claude vai seguir quando a skill for invocada.
-Pode referenciar arquivos em references/ com links relativos:
-
-Leia [references/meu-arquivo.md](references/meu-arquivo.md) para...
-```
-
-O SKILL.md é um prompt. Ele diz ao Claude o que fazer, em que ordem, e onde encontrar informações de referência. Os arquivos em `references/` contêm o conhecimento de domínio (catálogos, templates, guias) que a skill consulta durante a execução.
-
----
-
 ## Requisitos
 
 ### 1. Análise Manual dos Projetos
@@ -173,24 +134,11 @@ Documentar os achados na seção "Análise Manual" do seu `README.md`
 
 ### 2. Criação da Skill
 
-Agora que você conhece os problemas, crie uma skill que os detecte e corrija automaticamente.
+Agora que você conhece os problemas, crie uma skill que os detecte, gere um relatório de auditoria e corrija automaticamente.
 
 **Tarefas:**
 
-Criar a estrutura de diretórios da skill dentro do projeto `code-smells-project/`:
-
-```
-.claude/skills/refactor-arch/
-├── SKILL.md
-└── references/
-    ├── analysis-guide.md
-    ├── antipatterns-catalog.md
-    ├── report-template.md
-    ├── mvc-guidelines.md
-    └── refactoring-playbook.md
-```
-
-Implementar o SKILL.md com 3 fases sequenciais:
+Criar a skill dentro do projeto `code-smells-project/` e implementar o SKILL.md com 3 fases sequenciais:
 
 - **Fase 1 — Análise:** Detectar stack, mapear arquitetura atual, imprimir resumo
 - **Fase 2 — Auditoria:** Cruzar código contra catálogo de anti-patterns, gerar relatório, pedir confirmação
@@ -269,7 +217,7 @@ claude "/refactor-arch"
 
 - Verificar que:
   - A Fase 1 detecta corretamente Python/Flask como stack e identifica o domínio de Task Manager
-  - A Fase 2 identifica problemas mesmo em um projeto parcialmente organizado (credenciais hardcoded, hash MD5, fake JWT, N+1 queries, código duplicado, etc.)
+  - A Fase 2 identifica problemas mesmo em um projeto parcialmente organizado
   - A Fase 3 melhora a estrutura sem quebrar a aplicação (todos os endpoints devem continuar respondendo)
 - Salvar o relatório em `reports/audit-project-3.md`
 
@@ -394,35 +342,7 @@ desafio-skills/
 - `ecommerce-api-legacy/` — E-commerce/LMS API Node.js/Express com problemas de implementação
 - `task-manager-api/` — API de Task Manager Python/Flask com organização parcial e problemas de segurança/qualidade
 
-## Exemplos de problemas nos projetos
-
-Para que você entenda o tipo de problema que a skill deve detectar, aqui estão alguns exemplos. Parte do desafio é descobri-los na sua análise manual.
-
-### code-smells-project (API de E-commerce — Python/Flask)
-
-| Severidade | Problema |
-|---|---|
-| CRITICAL | SQL Injection — queries construídas com f-string em vez de parâmetros |
-| HIGH | God Class — um único arquivo concentra lógica de múltiplos domínios |
-| MEDIUM | `print()` usado para logs em vez do módulo `logging` |
-
-### ecommerce-api-legacy (E-commerce API — Node.js/Express)
-
-| Severidade | Problema |
-|---|---|
-| CRITICAL | Credenciais e senhas padrão hardcoded no código |
-| HIGH | Lógica de negócio pesada implementada diretamente nas definições de rota |
-| MEDIUM | Validação ausente no payload de requisições POST |
-
-### task-manager-api (Task Manager — Python/Flask)
-
-| Severidade | Problema |
-|---|---|
-| CRITICAL | Hash MD5 para senhas — criptograficamente quebrado |
-| HIGH | Credenciais hardcoded (secret key, SMTP, database URI) |
-| MEDIUM | N+1 queries — loops buscando usuário/categoria um por um |
-
-Seu trabalho é ler o código, encontrar estes e os demais problemas, e então construir uma skill capaz de detectá-los automaticamente.
+> **Dica:** Cada projeto contém problemas intencionais de diferentes severidades (CRITICAL, HIGH, MEDIUM, LOW), incluindo falhas de segurança, violações arquiteturais e problemas de qualidade de código. Parte do desafio é identificá-los por conta própria através da análise manual do código.
 
 ---
 
@@ -526,3 +446,4 @@ Repositório público no GitHub (fork do repositório base) contendo:
 - **A skill deve ser copiável** — se ela só funciona em um projeto específico, está acoplada demais. Teste nos 3 projetos para validar.
 - **Projetos diferentes exigem adaptação** — a Fase 3 de um projeto já parcialmente organizado não vai ter as mesmas transformações de um monolito. Sua skill deve se adaptar ao contexto.
 - **Pedir confirmação na Fase 2 é obrigatório** — o humano deve revisar o relatório antes de qualquer modificação.
+- **Consulte as referências do curso** — revise a documentação oficial de Claude Code Skills e os materiais das aulas para relembrar a estrutura e anatomia de uma skill.
