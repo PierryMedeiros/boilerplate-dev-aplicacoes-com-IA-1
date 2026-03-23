@@ -430,10 +430,9 @@ Repositório público no GitHub (fork do repositório base) contendo:
 
 ## Referências úteis
 
-- The Complete Guide to Building Skills for Claude (PDF) (Inserir link correto depois)
-- Repositório oficial de Skills da Anthropic (Inserir link correto depois)
-- Equipping Agents for the Real World with Agent Skills (Inserir link correto depois)
-- Claude Code: Best practices for agentic coding (Inserir link correto depois)
+- The Complete Guide to Building Skills for Claude (PDF) (https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf)
+- Equipping Agents for the Real World with Agent Skills (https://claude.com/blog/equipping-agents-for-the-real-world-with-agent-skills)
+- Claude Code: Best practices for agentic coding (https://medium.com/@habib.mrad.83/claude-code-practical-best-practices-for-agentic-coding-2be1b62cfeff)
 
 ---
 
