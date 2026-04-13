@@ -11,7 +11,7 @@ Você deve entregar uma Skill capaz de:
 - Analisar uma codebase detectando linguagem, framework e arquitetura atual
 - Identificar anti-patterns e code smells, classificando por severidade com arquivo e linha exatos
 - Gerar um relatório de auditoria estruturado com todos os achados
-- Refatorar o projeto para o padrão MVC (Model-View-Controller), eliminando os problemas enco1ntrados
+- Refatorar o projeto para o padrão MVC (Model-View-Controller), eliminando os problemas encontrados
 - Validar o resultado garantindo que a aplicação continua funcionando após as mudanças
 
 A skill deve ser agnóstica de tecnologia, funcionando com diferentes linguagens e frameworks.
@@ -109,10 +109,15 @@ src/
 
 ## Tecnologias obrigatórias
 
-- **Ferramenta:** Claude Code (CLI)
-- **Recurso:** Custom Skills (`.claude/skills/`)
+- **Ferramenta:** uma das três opções abaixo (não são aceitas outras ferramentas):
+  - Claude Code
+  - Gemini CLI
+  - OpenAI Codex
+- **Recurso:** Custom Skills (ou o equivalente na ferramenta escolhida)
 - **Formato dos arquivos de referência:** Markdown
 - **Projetos-alvo:** Python/Flask (2 projetos) e Node.js/Express (1 projeto) (fornecidos no repositório base)
+
+> **Nota sobre a ferramenta:** Os exemplos deste enunciado usam o Claude Code (`.claude/skills/`) como referência, pois é a ferramenta utilizada no curso. Se você optar por Gemini CLI ou Codex, adapte o nome da pasta e o comando de invocação conforme a convenção dela — o conceito de skill e a estrutura interna (SKILL.md + arquivos de referência) permanecem os mesmos.
 
 ## Requisitos
 
@@ -160,7 +165,7 @@ Criar arquivos de referência em Markdown que forneçam à skill o conhecimento 
 | Guidelines de arquitetura | Regras do padrão MVC alvo (camadas Models, Views/Routes e Controllers, responsabilidades de cada uma) |
 | Playbook de refatoração | Padrões concretos de transformação para cada anti-pattern (com exemplos de código) |
 
-> **Nota:** Você tem liberdade para organizar os arquivos de referência como preferir — pode usar os nomes e a quantidade de arquivos que fizer sentido para sua skill. O importante é que todas as 5 áreas de conhecimento estejam cobertas. O path da skill (`.claude/skills/refactor-arch/`) e o arquivo `SKILL.md` são obrigatórios e não devem ser alterados.
+> **Nota:** Você tem liberdade para organizar os arquivos de referência como preferir — pode usar os nomes e a quantidade de arquivos que fizer sentido para sua skill. O importante é que todas as 5 áreas de conhecimento estejam cobertas. O nome da skill (`refactor-arch`) e o arquivo `SKILL.md` são obrigatórios e não devem ser alterados. O path da skill segue a convenção da ferramenta escolhida (no Claude Code, por exemplo, é `.claude/skills/refactor-arch/`).
 
 **Requisitos da skill:**
 
@@ -182,6 +187,8 @@ Invocar a skill no Claude Code:
 ```bash
 claude "/refactor-arch"
 ```
+
+> **Nota:** O comando acima é o exemplo com Claude Code. Se você estiver usando Gemini CLI ou Codex, utilize o comando equivalente para invocar uma skill na sua ferramenta.
 
 - Verificar que a Fase 1 detecta corretamente a stack e imprime o resumo
 - Verificar que a Fase 2 encontra no mínimo 5 dos problemas documentados na sua análise manual
@@ -278,6 +285,8 @@ Repositório público no GitHub (fork do repositório base) contendo:
 
 Faça um fork do repositório base contendo os três projetos com code smells.
 
+> **Nota:** A estrutura abaixo usa Claude Code como exemplo (`.claude/skills/`). Se estiver usando outra ferramenta, adapte os caminhos conforme a convenção dela.
+
 ```
 desafio-skills/
 ├── README.md                              # Sua documentação
@@ -366,7 +375,7 @@ desafio-skills/
 
 **D) Seção "Como Executar":**
 
-- Pré-requisitos (Claude Code instalado e configurado)
+- Pré-requisitos (a ferramenta escolhida — Claude Code, Gemini CLI ou Codex — instalada e configurada)
 - Comandos para executar a skill em cada projeto
 - Como validar que a refatoração funcionou
 
@@ -429,10 +438,10 @@ A skill deve atingir os seguintes mínimos em **todos os 3 projetos**:
 ## Dicas Finais
 
 - **Comece pela análise manual** — entender os problemas profundamente é essencial para criar uma skill que os detecte.
-- **O SKILL.md é um prompt** — ele instrui o Claude sobre o que fazer, enquanto os arquivos de referência fornecem o conhecimento de domínio.
+- **O SKILL.md é um prompt** — ele instrui o agente sobre o que fazer, enquanto os arquivos de referência fornecem o conhecimento de domínio.
 - **Seja específico nos sinais de detecção** — "código ruim" não ajuda; "query SQL dentro de loop for" é acionável.
 - **Teste incrementalmente** — não tente criar a skill perfeita de primeira.
 - **A skill deve ser copiável** — se ela só funciona em um projeto específico, está acoplada demais. Teste nos 3 projetos para validar.
 - **Projetos diferentes exigem adaptação** — a Fase 3 de um projeto já parcialmente organizado não vai ter as mesmas transformações de um monolito. Sua skill deve se adaptar ao contexto.
 - **Pedir confirmação na Fase 2 é obrigatório** — o humano deve revisar o relatório antes de qualquer modificação.
-- **Consulte as referências do curso** — revise a documentação oficial de Claude Code Skills e os materiais das aulas para relembrar a estrutura e anatomia de uma skill.
+- **Consulte as referências do curso** — revise a documentação oficial da ferramenta escolhida e os materiais das aulas para relembrar a estrutura e anatomia de uma skill.
