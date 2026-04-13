@@ -1,4 +1,8 @@
-# Criação de Skills para Claude Code — Refatoração Arquitetural Automatizada
+# Criação de Skills — Refatoração Arquitetural Automatizada
+
+Ao longo do curso você aprendeu o que são Skills e como elas permitem que um agente de IA atue como um especialista em tarefas específicas. Agora imagine o seguinte cenário: você herdou 3 projetos legados com problemas de arquitetura, segurança e qualidade de código. Revisar e corrigir tudo manualmente levaria dias.
+
+Neste desafio, você vai criar uma Skill que automatiza esse processo — analisando, auditando e refatorando qualquer projeto para o padrão MVC, independente da tecnologia.
 
 ## Objetivo
 
@@ -7,12 +11,14 @@ Você deve entregar uma Skill capaz de:
 - Analisar uma codebase detectando linguagem, framework e arquitetura atual
 - Identificar anti-patterns e code smells, classificando por severidade com arquivo e linha exatos
 - Gerar um relatório de auditoria estruturado com todos os achados
-- Refatorar o projeto para o padrão MVC (Model-View-Controller), eliminando os problemas encontrados
+- Refatorar o projeto para o padrão MVC (Model-View-Controller), eliminando os problemas enco1ntrados
 - Validar o resultado garantindo que a aplicação continua funcionando após as mudanças
 
-A skill deve ser agnóstica de tecnologia — funcionar com diferentes linguagens e frameworks.
+A skill deve ser agnóstica de tecnologia, funcionando com diferentes linguagens e frameworks.
 
-## Definição de Severidades
+## Contexto
+
+### Definição de Severidades
 
 Para padronizar a sua auditoria e os relatórios gerados pela IA, utilize a seguinte escala de classificação baseada em problemas de MVC e SOLID:
 
@@ -21,7 +27,7 @@ Para padronizar a sua auditoria e os relatórios gerados pela IA, utilize a segu
 - **MEDIUM:** Problemas de padronização, duplicação de código ou gargalos de performance moderada (ex: Queries N+1 no banco de dados, uso inadequado de middlewares, validações ausentes nas rotas).
 - **LOW:** Melhorias de legibilidade, nomenclatura de variáveis ruins, ou "magic numbers" soltos pelo código.
 
-## Exemplo no CLI
+### Exemplo de Uso no CLI
 
 ```bash
 # Executar a skill no projeto com problemas
@@ -144,15 +150,17 @@ Criar a skill dentro do projeto `code-smells-project/` e implementar o SKILL.md 
 - **Fase 2 — Auditoria:** Cruzar código contra catálogo de anti-patterns, gerar relatório, pedir confirmação
 - **Fase 3 — Refatoração:** Reestruturar para o padrão MVC, validar que funciona
 
-Criar os 5 arquivos de referência obrigatórios:
+Criar arquivos de referência em Markdown que forneçam à skill o conhecimento necessário para executar as 3 fases. Os arquivos devem cobrir **obrigatoriamente** as seguintes áreas de conhecimento:
 
-| Arquivo | Propósito |
+| Área de conhecimento | O que deve conter |
 |---|---|
-| `analysis-guide.md` | Heurísticas para detecção de linguagem, framework, banco de dados e mapeamento de arquitetura |
-| `antipatterns-catalog.md` | Catálogo de anti-patterns com sinais de detecção e classificação de severidade |
-| `report-template.md` | Template exato do relatório de auditoria (Fase 2) |
-| `mvc-guidelines.md` | Regras do padrão MVC alvo (camadas Models, Views/Routes e Controllers, responsabilidades de cada uma) |
-| `refactoring-playbook.md` | Padrões concretos de transformação para cada anti-pattern (com exemplos de código) |
+| Análise de projeto | Heurísticas para detecção de linguagem, framework, banco de dados e mapeamento de arquitetura |
+| Catálogo de anti-patterns | Anti-patterns com sinais de detecção e classificação de severidade |
+| Template de relatório | Formato padronizado do relatório de auditoria (Fase 2) |
+| Guidelines de arquitetura | Regras do padrão MVC alvo (camadas Models, Views/Routes e Controllers, responsabilidades de cada uma) |
+| Playbook de refatoração | Padrões concretos de transformação para cada anti-pattern (com exemplos de código) |
+
+> **Nota:** Você tem liberdade para organizar os arquivos de referência como preferir — pode usar os nomes e a quantidade de arquivos que fizer sentido para sua skill. O importante é que todas as 5 áreas de conhecimento estejam cobertas. O path da skill (`.claude/skills/refactor-arch/`) e o arquivo `SKILL.md` são obrigatórios e não devem ser alterados.
 
 **Requisitos da skill:**
 
@@ -163,11 +171,11 @@ Criar os 5 arquivos de referência obrigatórios:
 - A Fase 2 deve pausar e pedir confirmação antes de modificar qualquer arquivo
 - A Fase 3 deve validar o resultado (boot da aplicação + endpoints funcionando)
 
-### 3. Execução contra o Projeto 1 (code-smells-project)
+### 3. Execução da Skill
 
-Execute sua skill e valide que ela funciona.
+Execute sua skill nos 3 projetos e valide que ela funciona em todas as stacks.
 
-**Tarefas:**
+#### Projeto 1 — code-smells-project (Python/Flask)
 
 Invocar a skill no Claude Code:
 
@@ -184,11 +192,9 @@ claude "/refactor-arch"
   - Os endpoints originais continuam respondendo
 - Salvar o relatório de auditoria (output da Fase 2) em `reports/audit-project-1.md`
 
-### 4. Execução contra o Projeto 2 (ecommerce-api-legacy)
+#### Projeto 2 — ecommerce-api-legacy (Node.js/Express)
 
 Prove que sua skill é reutilizável em outro projeto de backend, mas com stack diferente.
-
-**Tarefas:**
 
 - Copiar a pasta `.claude/skills/refactor-arch/` para dentro de `ecommerce-api-legacy/`
 - Invocar a skill:
@@ -201,11 +207,9 @@ claude "/refactor-arch"
 - Verificar que as 3 fases executam corretamente neste projeto
 - Salvar o relatório em `reports/audit-project-2.md`
 
-### 5. Execução contra o Projeto 3 (task-manager-api)
+#### Projeto 3 — task-manager-api (Python/Flask)
 
 Agora o teste com um projeto Python/Flask que já possui alguma organização de camadas (models, routes, services, utils).
-
-**Tarefas:**
 
 - Copiar a pasta `.claude/skills/refactor-arch/` para dentro de `task-manager-api/`
 - Invocar a skill:
@@ -223,9 +227,7 @@ claude "/refactor-arch"
 
 > **Nota:** Este projeto já possui alguma separação de camadas, mas isso não significa que a arquitetura está adequada. A skill deve identificar tanto problemas de código (segurança, performance, qualidade) quanto oportunidades de melhoria arquitetural. Se houver mudanças estruturais necessárias, a skill deve propô-las e executá-las.
 
-### 6. Testes de Validação da Skill
-
-O que você deve verificar e documentar:
+#### Validação
 
 Para cada projeto refatorado, valide o seguinte checklist:
 
@@ -239,7 +241,7 @@ Para cada projeto refatorado, valide o seguinte checklist:
 - [ ] Número de arquivos analisados condiz com a realidade
 
 ### Fase 2 — Auditoria
-- [ ] Relatório segue o template definido em report-template.md
+- [ ] Relatório segue o template definido nos arquivos de referência
 - [ ] Cada finding tem arquivo e linhas exatos
 - [ ] Findings ordenados por severidade (CRITICAL → LOW)
 - [ ] Mínimo de 5 findings identificados
@@ -247,7 +249,7 @@ Para cada projeto refatorado, valide o seguinte checklist:
 - [ ] Skill pausa e pede confirmação antes da Fase 3
 
 ### Fase 3 — Refatoração
-- [ ] Estrutura de diretórios segue mvc-guidelines.md
+- [ ] Estrutura de diretórios segue padrão MVC
 - [ ] Configuração extraída para módulo de config (sem hardcoded)
 - [ ] Models criados para abstrair dados
 - [ ] Views/Routes separadas para visualização ou roteamento
@@ -258,22 +260,17 @@ Para cada projeto refatorado, valide o seguinte checklist:
 - [ ] Endpoints originais respondem corretamente
 ```
 
-## Critério de Aprovação
+> **Dica:** Se a skill não detectou problemas suficientes ou a refatoração falhou, ajuste os arquivos de referência e execute novamente. É normal precisar de 2-4 iterações.
 
-A skill deve atingir os seguintes mínimos em **todos os 3 projetos**:
+## Entregável
 
-| Critério | Requisito |
-|---|---|
-| Fase 1 detecta stack corretamente | OBRIGATÓRIO (3/3 projetos) |
-| Fase 2 encontra >= 5 findings | OBRIGATÓRIO (3/3 projetos) |
-| Fase 2 inclui pelo menos 1 CRITICAL ou HIGH | OBRIGATÓRIO (3/3 projetos) |
-| Fase 3 aplicação funciona após refatoração | OBRIGATÓRIO (3/3 projetos) |
+Repositório público no GitHub (fork do repositório base) contendo:
 
-**IMPORTANTE:** Todos os critérios devem ser atingidos nos 3 projetos, não apenas em um!
+- Skill completa em `.claude/skills/refactor-arch/` (dentro dos 3 projetos)
+- Relatórios de auditoria em `reports/` (3 arquivos)
+- `README.md` atualizado
 
-> **Sobre o projeto 3 (task-manager-api):** Este projeto já possui alguma organização. "aplicação funciona" significa que a API inicia sem erros e todos os endpoints continuam respondendo corretamente.
-
-## Estrutura obrigatória do projeto
+### Estrutura do repositório
 
 Faça um fork do repositório base contendo os três projetos com code smells.
 
@@ -286,12 +283,7 @@ desafio-skills/
 │   │   └── skills/
 │   │       └── refactor-arch/             # ← SUA SKILL AQUI
 │   │           ├── SKILL.md
-│   │           └── references/
-│   │               ├── analysis-guide.md
-│   │               ├── antipatterns-catalog.md
-│   │               ├── report-template.md
-│   │               ├── mvc-guidelines.md
-│   │               └── refactoring-playbook.md
+│   │           └── (arquivos de referência)
 │   ├── app.py
 │   ├── controllers.py
 │   ├── models.py
@@ -332,7 +324,7 @@ desafio-skills/
 
 **O que você vai criar:**
 
-- `.claude/skills/refactor-arch/` — A skill completa (SKILL.md + 5 arquivos de referência)
+- `.claude/skills/refactor-arch/` — A skill completa (SKILL.md + arquivos de referência)
 - `reports/audit-project-{1,2,3}.md` — Relatório de auditoria de cada projeto
 - `README.md` — Documentação do seu processo
 
@@ -344,60 +336,7 @@ desafio-skills/
 
 > **Dica:** Cada projeto contém problemas intencionais de diferentes severidades (CRITICAL, HIGH, MEDIUM, LOW), incluindo falhas de segurança, violações arquiteturais e problemas de qualidade de código. Parte do desafio é identificá-los por conta própria através da análise manual do código.
 
----
-
-## Ordem de execução
-
-**1. Analisar os projetos manualmente**
-
-Leia o código dos três projetos e documente os problemas encontrados.
-
-**2. Criar a skill**
-
-Escreva o SKILL.md e os 5 arquivos de referência.
-
-**3. Executar no projeto 1 (Python/Flask)**
-
-```bash
-cd code-smells-project
-claude "/refactor-arch"
-```
-
-Salve a saída da Fase 2 em `reports/audit-project-1.md`.
-
-**4. Executar no projeto 2 (Node.js/Express)**
-
-```bash
-cd ../ecommerce-api-legacy
-claude "/refactor-arch"
-```
-
-Salve a saída da Fase 2 em `reports/audit-project-2.md`.
-
-**5. Executar no projeto 3 (Python/Flask)**
-
-```bash
-cd ../task-manager-api
-claude "/refactor-arch"
-```
-
-Salve a saída da Fase 2 em `reports/audit-project-3.md`.
-
-**6. Iterar**
-
-Se a skill não detectou problemas suficientes ou a refatoração falhou, ajuste os arquivos de referência e execute novamente. É normal precisar de 2-4 iterações.
-
----
-
-## Entregável
-
-Repositório público no GitHub (fork do repositório base) contendo:
-
-- Skill completa em `.claude/skills/refactor-arch/` (dentro dos 3 projetos)
-- Relatórios de auditoria em `reports/` (3 arquivos)
-- `README.md` atualizado
-
-### README.md deve conter:
+### README.md deve conter
 
 **A) Seção "Análise Manual":**
 
@@ -407,7 +346,7 @@ Repositório público no GitHub (fork do repositório base) contendo:
 
 **B) Seção "Construção da Skill":**
 
-- Decisões de design: por que organizou a skill em 3 fases
+- Decisões de design: como estruturou o SKILL.md e os arquivos de referência
 - Quais anti-patterns incluiu no catálogo e por quê
 - Como garantiu que a skill é agnóstica de tecnologia
 - Desafios encontrados e como resolveu
@@ -426,13 +365,59 @@ Repositório público no GitHub (fork do repositório base) contendo:
 - Comandos para executar a skill em cada projeto
 - Como validar que a refatoração funcionou
 
----
+### Ordem de execução sugerida
 
-## Referências úteis
+**1. Analisar os projetos manualmente**
 
-- The Complete Guide to Building Skills for Claude (PDF) (https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf)
-- Equipping Agents for the Real World with Agent Skills (https://claude.com/blog/equipping-agents-for-the-real-world-with-agent-skills)
-- Claude Code: Best practices for agentic coding (https://medium.com/@habib.mrad.83/claude-code-practical-best-practices-for-agentic-coding-2be1b62cfeff)
+Leia o código dos três projetos e documente os problemas encontrados.
+
+**2. Criar a skill**
+
+Escreva o SKILL.md e os arquivos de referência.
+
+**3. Executar nos 3 projetos**
+
+```bash
+# Projeto 1
+cd code-smells-project
+claude "/refactor-arch"
+
+# Projeto 2
+cd ../ecommerce-api-legacy
+claude "/refactor-arch"
+
+# Projeto 3
+cd ../task-manager-api
+claude "/refactor-arch"
+```
+
+Salve a saída da Fase 2 de cada projeto em `reports/audit-project-{1,2,3}.md`.
+
+**4. Iterar**
+
+Se a skill não detectou problemas suficientes ou a refatoração falhou, ajuste os arquivos de referência e execute novamente. É normal precisar de 2-4 iterações.
+
+## Critérios de Aceite
+
+A skill deve atingir os seguintes mínimos em **todos os 3 projetos**:
+
+| Critério | Requisito |
+|---|---|
+| Fase 1 detecta stack corretamente | OBRIGATÓRIO (3/3 projetos) |
+| Fase 2 encontra >= 5 findings | OBRIGATÓRIO (3/3 projetos) |
+| Fase 2 inclui pelo menos 1 CRITICAL ou HIGH | OBRIGATÓRIO (3/3 projetos) |
+| Fase 3 aplicação funciona após refatoração | OBRIGATÓRIO (3/3 projetos) |
+
+**IMPORTANTE:** Todos os critérios devem ser atingidos nos 3 projetos, não apenas em um!
+
+> **Sobre o projeto 3 (task-manager-api):** Este projeto já possui alguma organização. "aplicação funciona" significa que a API inicia sem erros e todos os endpoints continuam respondendo corretamente.
+
+## Referências
+
+- [Claude Code: Skills](https://docs.anthropic.com/en/docs/claude-code/skills) — Documentação oficial sobre como criar e estruturar Skills
+- [Claude Code: Overview](https://docs.anthropic.com/en/docs/claude-code/overview) — Visão geral do Claude Code e suas capacidades
+- [The Complete Guide to Building Skills for Claude (PDF)](https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf) — Guia completo da Anthropic sobre construção de Skills
+- [Equipping Agents for the Real World with Agent Skills](https://claude.com/blog/equipping-agents-for-the-real-world-with-agent-skills) — Blog oficial da Anthropic sobre Agent Skills
 
 ---
 
