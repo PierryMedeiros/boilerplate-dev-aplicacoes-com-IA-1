@@ -191,6 +191,7 @@ claude "/refactor-arch"
   - A aplicação inicia sem erros
   - Os endpoints originais continuam respondendo
 - Salvar o relatório de auditoria (output da Fase 2) em `reports/audit-project-1.md`
+- Commitar o código refatorado do projeto no repositório
 
 #### Projeto 2 — ecommerce-api-legacy (Node.js/Express)
 
@@ -206,6 +207,7 @@ claude "/refactor-arch"
 
 - Verificar que as 3 fases executam corretamente neste projeto
 - Salvar o relatório em `reports/audit-project-2.md`
+- Commitar o código refatorado do projeto no repositório
 
 #### Projeto 3 — task-manager-api (Python/Flask)
 
@@ -224,6 +226,7 @@ claude "/refactor-arch"
   - A Fase 2 identifica problemas mesmo em um projeto parcialmente organizado
   - A Fase 3 melhora a estrutura sem quebrar a aplicação (todos os endpoints devem continuar respondendo)
 - Salvar o relatório em `reports/audit-project-3.md`
+- Commitar o código refatorado do projeto no repositório
 
 > **Nota:** Este projeto já possui alguma separação de camadas, mas isso não significa que a arquitetura está adequada. A skill deve identificar tanto problemas de código (segurança, performance, qualidade) quanto oportunidades de melhoria arquitetural. Se houver mudanças estruturais necessárias, a skill deve propô-las e executá-las.
 
@@ -267,6 +270,7 @@ Para cada projeto refatorado, valide o seguinte checklist:
 Repositório público no GitHub (fork do repositório base) contendo:
 
 - Skill completa em `.claude/skills/refactor-arch/` (dentro dos 3 projetos)
+- Código refatorado dos 3 projetos (resultado da execução da Fase 3, commitado no repositório)
 - Relatórios de auditoria em `reports/` (3 arquivos)
 - `README.md` atualizado
 
@@ -325,6 +329,7 @@ desafio-skills/
 **O que você vai criar:**
 
 - `.claude/skills/refactor-arch/` — A skill completa (SKILL.md + arquivos de referência)
+- Código refatorado dos 3 projetos — resultado da execução da Fase 3, commitado no repositório
 - `reports/audit-project-{1,2,3}.md` — Relatório de auditoria de cada projeto
 - `README.md` — Documentação do seu processo
 
